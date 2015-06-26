@@ -13,9 +13,9 @@ A command line interface for Airport wireless on OS X.
 
 ```
 Usage:
-  $_ME (on | off | info | quality | scan | join <SSID>)
-  $_ME -h | --help | help
-  $_ME --version
+  airport (on | off | info | quality | scan | join <SSID>)
+  airport -h | --help | help
+  airport --version
 
 Subcommands:
   on       Turn wireless on.
