@@ -296,7 +296,7 @@ do
     --version)
       _PRINT_VERSION=1
       ;;
-    on|off|info|quality|scan|join|version)
+    on|off|info|quality|scan|join)
       _SUBCOMMAND="$opt"
       ;;
     --endopts)
