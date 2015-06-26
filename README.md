@@ -43,7 +43,7 @@ To install with [Homebrew](http://brew.sh/):
 
 To install with [bpkg](http://www.bpkg.io/):
 
-    bpkg install alphabetum/aiport
+    bpkg install alphabetum/airport
 
 ### Manual
 
