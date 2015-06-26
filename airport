@@ -125,7 +125,7 @@ A command line interface for Wi-Fi on OS X.
 
 Usage:
   $_ME (on | off | info | quality | scan | join <SSID>)
-  $_ME -h | --help
+  $_ME -h | --help | help
 
 Subcommands:
   on       Turn wireless on.
@@ -134,6 +134,7 @@ Subcommands:
   quality  Show the wireless quality as a percentage.
   scan     Perform a scan for wireless networks.
   join     Join the specified network.
+  help     Display this help information.
 
 Options:
   -h --help  Display this help information.
@@ -240,7 +241,7 @@ _PRINT_HELP=0
 _USE_DEBUG=0
 
 # Initialize additional expected option variables.
-_SUBCOMMAND="info"
+_SUBCOMMAND="help"
 _ARGUMENTS=("$0")
 
 # _require_argument()
@@ -357,6 +358,9 @@ _airport() {
       ;;
     "scan")
       "$_AIRPORT_CMD" --scan
+      ;;
+    "help")
+      _print_help
       ;;
   esac
 }
