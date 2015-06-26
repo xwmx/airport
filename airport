@@ -241,8 +241,16 @@ read -d '' "_program_help" <<EOM || true
 A command line interface for Wi-Fi on OS X.
 
 Usage:
-  $_ME [--options] [<arguments>]
+  $_ME (on | off | info | quality | scan | join <SSID>)
   $_ME -h | --help
+
+Subcommands:
+  on       Turn wireless on.
+  off      Turn wireless off.
+  info     Show the current airport status.
+  quality  Show the wireless quality as a percentage.
+  scan     Perform a scan for wireless networks.
+  join     Join the specified network.
 
 Options:
   -h --help  Display this help information.
@@ -349,9 +357,8 @@ _print_help=0
 _USE_DEBUG=0
 
 # Initialize additional expected option variables.
-_option_x=0
-_short_option_with_argument=""
-_long_option_with_argument=""
+_SUBCOMMAND="info"
+_ARGUMENTS=("$0")
 
 # _require_argument()
 #
@@ -382,7 +389,7 @@ _require_argument() {
 #   http://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
 #   http://stackoverflow.com/a/14203146
 #   http://stackoverflow.com/a/7948533
-while [[ "${1:-}" = -?* ]]
+while [ $# -gt 0 ]
 do
   opt="$1"
   shift
@@ -393,50 +400,87 @@ do
     --debug)
       _USE_DEBUG=1
       ;;
-    -x|--option-x)
-      _option_x=1
-      ;;
-    -o)
-      _short_option_with_argument="${1:-}"
-      _require_argument "$opt" "$_short_option_with_argument"
-       shift
-      ;;
-    --long-option-with-argument)
-      _long_option_with_argument="${1:-}"
-      _require_argument "$opt" "$_long_option_with_argument"
-      shift
+    on|off|info|quality|scan|join)
+      _SUBCOMMAND="$opt"
       ;;
     --endopts)
       # Terminate option parsing.
       break
       ;;
     *)
-      _die printf "Unexpected option: %s\n" "$opt"
+      _ARGUMENTS+=("$opt")
       ;;
   esac
 done
+
+_debug printf "\$_SUBCOMMAND: %s\n" "$_SUBCOMMAND"
+_debug printf "\$_ARGUMENTS: %s\n" "${_ARGUMENTS[*]:-}"
 
 ###############################################################################
 # Program Functions
 ###############################################################################
 
-_simple() {
-  _debug printf ">> Performing operation...\n"
+_AIRPORT_FRAMEWORK_PATH="/System/Library/PrivateFrameworks/Apple80211.framework"
+_AIRPORT_CMD="${_AIRPORT_FRAMEWORK_PATH}/Versions/A/Resources/airport"
+_airport() {
+  _debug printf "airport() >> start\n"
+  local _networksetup_cmd="$(which networksetup)"
 
-  if [[ "$_option_x" == 1 ]]
-  then
-    printf "Perform a simple operation with --option-x.\n"
-  else
-    printf "Perform a simple operation.\n"
-  fi
-  if [[ -n "$_short_option_with_argument" ]]
-  then
-    printf "Short option value: %s\n" "$_short_option_with_argument"
-  fi
-  if [[ -n "$_long_option_with_argument" ]]
-  then
-    printf "Long option value: %s\n" "$_long_option_with_argument"
-  fi
+  # Command references:
+  # - http://apple.stackexchange.com/a/90516
+  # - https://jamfnation.jamfsoftware.com/discussion.html?id=4849
+  local _wifi_interface="$(
+    "$_networksetup_cmd" \
+      -listallhardwareports | awk '/Wi-Fi|AirPort/ {getline; print $NF}'
+  )"
+
+  case "$_SUBCOMMAND" in
+    "on")
+      "$_networksetup_cmd" -setairportpower "$_wifi_interface" on && \
+        printf "Airport on\n"
+      ;;
+    "off")
+      "$_networksetup_cmd" -setairportpower "$_wifi_interface" off && \
+        printf "Airport off\n"
+      ;;
+    "join")
+      local _ssid="${_ARGUMENTS[1]:-}"
+      local _password=
+
+      # Request password without displaying it
+      printf "Password: "
+      read -s _password
+      printf "\n" # print newline to stop `read`.
+
+      _debug printf "airport() \$_wifi_interface: %s\n" "$_wifi_interface"
+      _debug printf "airport() \$_ssid: %s\n" "${_ssid}"
+
+      "$_networksetup_cmd" \
+        -setairportnetwork \
+        "$_wifi_interface" \
+        "$_ssid" \
+        "$_password"
+      ;;
+    "info")
+      "$_AIRPORT_CMD" --getinfo
+      ;;
+    "quality")
+      # Reference: http://apple.stackexchange.com/a/110884
+      local _info="$($_ME airport info)"
+      local _signal="$(
+        printf "%s\n" "$_info" | awk '/agrCtlRSSI/ {print $NF}'
+      )"
+      local _noise="$(
+        printf "%s\n" "$_info" | awk '/agrCtlNoise/ {print $NF}'
+      )"
+      local _snr="$(printf "100*(%s -(%s))\n" "$_signal" "$_noise" | bc -l)"
+      local _percent="$(printf "%s/50\n" "$_snr" | bc -l)"
+      printf "%s%%\n" "${_percent%.*}"
+      ;;
+    "scan")
+      "$_AIRPORT_CMD" --scan
+      ;;
+  esac
 }
 
 ###############################################################################
@@ -448,7 +492,7 @@ _main() {
   then
     _print_help
   else
-    _simple "$@"
+    _airport "$@"
   fi
 }
 
