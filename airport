@@ -28,6 +28,8 @@ IFS="$SAFER_IFS"
 # Environment
 ###############################################################################
 
+_VERSION="0.1.0-alpha"
+
 # $_ME
 #
 # Set to the program's basename.
@@ -126,6 +128,7 @@ A command line interface for Wi-Fi on OS X.
 Usage:
   $_ME (on | off | info | quality | scan | join <SSID>)
   $_ME -h | --help | help
+  $_ME --version
 
 Subcommands:
   on       Turn wireless on.
@@ -138,6 +141,7 @@ Subcommands:
 
 Options:
   -h --help  Display this help information.
+  --version  Display version information.
 EOM
 
 # _print_help()
@@ -147,6 +151,19 @@ EOM
 # Print the program help information.
 _print_help() {
   printf "%s\n" "$_program_help"
+}
+
+###############################################################################
+# Version
+###############################################################################
+
+# _print_version()
+#
+# Usage: _print_version
+#
+# Print the value of $_VERSION.
+_print_version() {
+  printf "%s\n" "$_VERSION"
 }
 
 ###############################################################################
@@ -238,6 +255,7 @@ unset options
 
 # Initialize program option variables.
 _PRINT_HELP=0
+_PRINT_VERSION=0
 _USE_DEBUG=0
 
 # Initialize additional expected option variables.
@@ -279,7 +297,10 @@ do
     --debug)
       _USE_DEBUG=1
       ;;
-    on|off|info|quality|scan|join)
+    --version)
+      _PRINT_VERSION=1
+      ;;
+    on|off|info|quality|scan|join|version)
       _SUBCOMMAND="$opt"
       ;;
     --endopts)
@@ -373,6 +394,9 @@ _main() {
   if [[ "$_PRINT_HELP" == 1 ]]
   then
     _print_help
+  elif [[ "$_PRINT_VERSION" == 1 ]]
+  then
+    _print_version
   else
     _airport "$@"
   fi
