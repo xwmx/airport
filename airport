@@ -353,7 +353,7 @@ unset options
 # Parse Options ###############################################################
 
 # Initialize program option variables.
-_print_help=0
+_PRINT_HELP=0
 _USE_DEBUG=0
 
 # Initialize additional expected option variables.
@@ -395,7 +395,7 @@ do
   shift
   case "$opt" in
     -h|--help)
-      _print_help=1
+      _PRINT_HELP=1
       ;;
     --debug)
       _USE_DEBUG=1
@@ -488,7 +488,7 @@ _airport() {
 ###############################################################################
 
 _main() {
-  if [[ "$_print_help" == 1 ]]
+  if [[ "$_PRINT_HELP" == 1 ]]
   then
     _print_help
   else
