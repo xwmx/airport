@@ -192,11 +192,7 @@ _print_version() {
 #
 # Very much like getopts, expected short options should be appended to the
 # string here. Any option followed by a ':' takes a required argument.
-#
-# In this example, `-x` and `-h` are regular short options, while `o` is
-# assumed to have an argument and will be split if joined with the string,
-# meaning `-oARG` would be split to `-o ARG`.
-optstring=xo:h
+optstring=h
 
 # Normalize -------------------------------------------------------------------
 
