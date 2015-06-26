@@ -30,3 +30,25 @@ Options:
   -h --help  Display this help information.
   --version  Display version information.
 ```
+
+## Installation
+
+### Homebrew
+
+To install with [Homebrew](http://brew.sh/):
+
+    brew tap alphabetum/taps && brew install alphabetum/taps/airport
+
+### bpkg
+
+To install with [bpkg](http://www.bpkg.io/):
+
+    bpkg install alphabetum/aiport
+
+### Manual
+
+To install manually, simply add the `airport` script to your `$PATH`. If
+you already have a `~/bin` directory, you can use the following command:
+
+    curl -L https://raw.github.com/alphabetum/airport/master/airport \
+      -o ~/bin/airport && chmod +x ~/bin/airport
