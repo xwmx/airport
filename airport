@@ -387,10 +387,10 @@ _airport() {
 ###############################################################################
 
 _main() {
-  if [[ "$_PRINT_HELP" == 1 ]]
+  if (("$_PRINT_HELP"))
   then
     _print_help
-  elif [[ "$_PRINT_VERSION" == 1 ]]
+  elif (("$_PRINT_VERSION"))
   then
     _print_version
   else
