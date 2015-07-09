@@ -317,12 +317,16 @@ _AIRPORT_FRAMEWORK_PATH="/System/Library/PrivateFrameworks/Apple80211.framework"
 _AIRPORT_CMD="${_AIRPORT_FRAMEWORK_PATH}/Versions/A/Resources/airport"
 _airport() {
   _debug printf "airport() >> start\n"
-  local _networksetup_cmd="$(which networksetup)"
+
+  local _networksetup_cmd
+  local _wifi_interface
+
+  _networksetup_cmd="$(which networksetup)"
 
   # Command references:
   # - http://apple.stackexchange.com/a/90516
   # - https://jamfnation.jamfsoftware.com/discussion.html?id=4849
-  local _wifi_interface="$(
+  _wifi_interface="$(
     "$_networksetup_cmd" \
       -listallhardwareports | awk '/Wi-Fi|AirPort/ {getline; print $NF}'
   )"
@@ -358,16 +362,22 @@ _airport() {
       "$_AIRPORT_CMD" --getinfo
       ;;
     "quality")
+      local _info
+      local _signal
+      local _noise
+      local _snr
+      local _percent
+
       # Reference: http://apple.stackexchange.com/a/110884
-      local _info="$($_ME airport info)"
-      local _signal="$(
+      _info="$($_ME airport info)"
+      _signal="$(
         printf "%s\n" "$_info" | awk '/agrCtlRSSI/ {print $NF}'
       )"
-      local _noise="$(
+      _noise="$(
         printf "%s\n" "$_info" | awk '/agrCtlNoise/ {print $NF}'
       )"
-      local _snr="$(printf "100*(%s -(%s))\n" "$_signal" "$_noise" | bc -l)"
-      local _percent="$(printf "%s/50\n" "$_snr" | bc -l)"
+      _snr="$(printf "100*(%s -(%s))\n" "$_signal" "$_noise" | bc -l)"
+      _percent="$(printf "%s/50\n" "$_snr" | bc -l)"
       printf "%s%%\n" "${_percent%.*}"
       ;;
     "scan")
