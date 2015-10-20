@@ -345,7 +345,7 @@ _airport() {
       local _password=
 
       # Request password without displaying it
-      printf "Password: "
+      printf "Password for \"%s\": " "$_ssid"
       read -s _password
       printf "\n" # print newline to stop `read`.
 
