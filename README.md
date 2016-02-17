@@ -13,7 +13,7 @@ A command line interface for Airport wireless on OS X.
 
 ```
 Usage:
-  airport (on | off | info | quality | scan | join <SSID>)
+  airport (on | off | info | quality | scan [<query>] | join <SSID>)
   airport -h | --help | help
   airport --version
 

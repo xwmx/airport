@@ -118,7 +118,7 @@ _print_help() {
 A command line interface for Wi-Fi on OS X.
 
 Usage:
-  $_ME (on | off | info | quality | scan | join <SSID>)
+  $_ME (on | off | info | quality | scan [<query>] | join <SSID>)
   $_ME -h | --help | help
   $_ME --version
 
@@ -368,7 +368,22 @@ _airport() {
       printf "%s%%\n" "${_percent%.*}"
       ;;
     "scan")
-      "$_AIRPORT_CMD" --scan
+      local _query="${_ARGUMENTS[1]:-}"
+      local _result=
+
+      if [[ -n "${_query}" ]]
+      then
+        _result="$("$_AIRPORT_CMD" --scan | grep "${_query}")"
+      else
+        _result="$("$_AIRPORT_CMD" --scan)"
+      fi
+
+      if [[ -n "${_result}" ]]
+      then
+        printf "%s\n" "${_result}"
+      else
+        return 1
+      fi
       ;;
     "tool")
       "$_AIRPORT_CMD" "${_ARGUMENTS[@]:1}"
