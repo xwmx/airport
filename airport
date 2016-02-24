@@ -30,7 +30,7 @@ _VERSION="0.2.0"
 # $_ME
 #
 # Set to the program's basename.
-_ME=$(basename "$0")
+_ME=$(basename "${0}")
 
 ###############################################################################
 # Debug
@@ -51,7 +51,7 @@ _debug() {
     __DEBUG_COUNTER=$((__DEBUG_COUNTER+1))
     # Prefix debug message with "bug (U+1F41B)"
     printf "🐛  %s " "${__DEBUG_COUNTER}"
-    "$@"
+    "${@}"
     printf "――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n"
   fi
 }
@@ -64,7 +64,7 @@ _debug() {
 #
 # This is a shortcut for the _debug() function that simply echos the message.
 debug() {
-  _debug echo "$@"
+  _debug echo "${@}"
 }
 
 ###############################################################################
@@ -82,7 +82,7 @@ debug() {
 _die() {
   # Prefix die message with "cross mark (U+274C)", often displayed as a red x.
   printf "❌  "
-  "$@" 1>&2
+  "${@}" 1>&2
   exit 1
 }
 # die()
@@ -94,7 +94,7 @@ _die() {
 #
 # This is a shortcut for the _die() function that simply echos the message.
 die() {
-  _die echo "$@"
+  _die echo "${@}"
 }
 
 ###############################################################################
@@ -118,9 +118,9 @@ _print_help() {
 A command line interface for Wi-Fi on OS X.
 
 Usage:
-  $_ME (on | off | info | quality | scan [<query>] | join <SSID>)
-  $_ME -h | --help | help
-  $_ME --version
+  ${_ME} (on | off | info | quality | scan [<query>] | join <SSID>)
+  ${_ME} -h | --help | help
+  ${_ME} --version
 
 Subcommands:
   on       Turn wireless on.
@@ -147,7 +147,7 @@ HEREDOC
 #
 # Print the value of $_VERSION.
 _print_version() {
-  printf "%s\n" "$_VERSION"
+  printf "%s\n" "${_VERSION}"
 }
 
 ###############################################################################
@@ -186,9 +186,9 @@ optstring=h
 # argument to the option, such as wget -qO-)
 unset options
 # while the number of arguments is greater than 0
-while (($#))
+while ((${#}))
 do
-  case $1 in
+  case ${1} in
     # if option is of type -ab
     -[!-]?*)
       # loop over each character starting with the second
@@ -197,11 +197,11 @@ do
         # extract 1 character from position 'i'
         c=${1:i:1}
         # add current char to options
-        options+=("-$c")
+        options+=("-${c}")
 
         # if option takes a required argument, and it's not the last char
         # make the rest of the string its argument
-        if [[ $optstring = *"$c:"* && ${1:i+1} ]]
+        if [[ ${optstring} = *"${c}:"* && ${1:i+1} ]]
         then
           options+=("${1:i+1}")
           break
@@ -216,12 +216,12 @@ do
     --)
       options+=(--endopts)
       shift
-      options+=("$@")
+      options+=("${@}")
       break
       ;;
     # otherwise, nothing special
     *)
-      options+=("$1")
+      options+=("${1}")
       ;;
   esac
 
@@ -240,7 +240,7 @@ _USE_DEBUG=0
 
 # Initialize additional expected option variables.
 _SUBCOMMAND="help"
-_ARGUMENTS=("$0")
+_ARGUMENTS=("${0}")
 
 # _require_argument()
 #
@@ -250,12 +250,12 @@ _ARGUMENTS=("$0")
 # Checks if an value has been set to the expected variable and, if not, prints
 # and error message and exits with status 1.
 _require_argument() {
-  local option="$1"
-  local value="$2"
+  local option="${1}"
+  local value="${2}"
 
-  if [[ -z "$value" ]]
+  if [[ -z "${value}" ]]
   then
-    _die printf "Option requires an argument: %s\n" "$option"
+    _die printf "Option requires an argument: %s\n" "${option}"
   fi
 }
 # getopts and getopts have inconsistent behavior, so using a simple home-brewed
@@ -266,11 +266,11 @@ _require_argument() {
 #   http://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
 #   http://stackoverflow.com/a/14203146
 #   http://stackoverflow.com/a/7948533
-while [ $# -gt 0 ]
+while [ ${#} -gt 0 ]
 do
-  opt="$1"
+  opt="${1}"
   shift
-  case "$opt" in
+  case "${opt}" in
     -h|--help)
       _PRINT_HELP=1
       ;;
@@ -281,20 +281,20 @@ do
       _PRINT_VERSION=1
       ;;
     on|off|info|quality|scan|join|tool)
-      _SUBCOMMAND="$opt"
+      _SUBCOMMAND="${opt}"
       ;;
     --endopts)
       # Terminate option parsing.
       break
       ;;
     *)
-      _ARGUMENTS+=("$opt")
+      _ARGUMENTS+=("${opt}")
       ;;
   esac
 done
 
-_debug printf "\$_SUBCOMMAND: %s\n" "$_SUBCOMMAND"
-_debug printf "\$_ARGUMENTS: %s\n" "${_ARGUMENTS[*]:-}"
+_debug printf "\${_SUBCOMMAND}: %s\n" "${_SUBCOMMAND}"
+_debug printf "\${_ARGUMENTS[*]:-}: %s\n" "${_ARGUMENTS[*]:-}"
 
 ###############################################################################
 # Program Functions
@@ -314,17 +314,17 @@ _airport() {
   # - http://apple.stackexchange.com/a/90516
   # - https://jamfnation.jamfsoftware.com/discussion.html?id=4849
   _wifi_interface="$(
-    "$_networksetup_cmd" \
+    "${_networksetup_cmd}" \
       -listallhardwareports | awk '/Wi-Fi|AirPort/ {getline; print $NF}'
   )"
 
-  case "$_SUBCOMMAND" in
+  case "${_SUBCOMMAND}" in
     "on")
-      "$_networksetup_cmd" -setairportpower "$_wifi_interface" on && \
+      "${_networksetup_cmd}" -setairportpower "${_wifi_interface}" on && \
         printf "Airport on\n"
       ;;
     "off")
-      "$_networksetup_cmd" -setairportpower "$_wifi_interface" off && \
+      "${_networksetup_cmd}" -setairportpower "${_wifi_interface}" off && \
         printf "Airport off\n"
       ;;
     "join")
@@ -332,21 +332,21 @@ _airport() {
       local _password=
 
       # Request password without displaying it
-      printf "Password for \"%s\": " "$_ssid"
+      printf "Password for \"%s\": " "${_ssid}"
       read -s _password
       printf "\n" # print newline to stop `read`.
 
-      _debug printf "airport() \$_wifi_interface: %s\n" "$_wifi_interface"
-      _debug printf "airport() \$_ssid: %s\n" "${_ssid}"
+      _debug printf "airport() \${_wifi_interface}: %s\n" "${_wifi_interface}"
+      _debug printf "airport() \${_ssid}: %s\n" "${_ssid}"
 
-      "$_networksetup_cmd" \
+      "${_networksetup_cmd}" \
         -setairportnetwork \
-        "$_wifi_interface" \
-        "$_ssid" \
-        "$_password"
+        "${_wifi_interface}" \
+        "${_ssid}" \
+        "${_password}"
       ;;
     "info")
-      "$_AIRPORT_CMD" --getinfo
+      "${_AIRPORT_CMD}" --getinfo
       ;;
     "quality")
       local _info
@@ -356,15 +356,15 @@ _airport() {
       local _percent
 
       # Reference: http://apple.stackexchange.com/a/110884
-      _info="$($_ME airport info)"
+      _info="$(${_ME} airport info)"
       _signal="$(
-        printf "%s\n" "$_info" | awk '/agrCtlRSSI/ {print $NF}'
+        printf "%s\n" "${_info}" | awk '/agrCtlRSSI/ {print $NF}'
       )"
       _noise="$(
-        printf "%s\n" "$_info" | awk '/agrCtlNoise/ {print $NF}'
+        printf "%s\n" "${_info}" | awk '/agrCtlNoise/ {print $NF}'
       )"
-      _snr="$(printf "100*(%s -(%s))\n" "$_signal" "$_noise" | bc -l)"
-      _percent="$(printf "%s/50\n" "$_snr" | bc -l)"
+      _snr="$(printf "100*(%s -(%s))\n" "${_signal}" "${_noise}" | bc -l)"
+      _percent="$(printf "%s/50\n" "${_snr}" | bc -l)"
       printf "%s%%\n" "${_percent%.*}"
       ;;
     "scan")
@@ -373,9 +373,9 @@ _airport() {
 
       if [[ -n "${_query}" ]]
       then
-        _result="$("$_AIRPORT_CMD" --scan | grep "${_query}")"
+        _result="$("${_AIRPORT_CMD}" --scan | grep "${_query}")"
       else
-        _result="$("$_AIRPORT_CMD" --scan)"
+        _result="$("${_AIRPORT_CMD}" --scan)"
       fi
 
       if [[ -n "${_result}" ]]
@@ -386,7 +386,7 @@ _airport() {
       fi
       ;;
     "tool")
-      "$_AIRPORT_CMD" "${_ARGUMENTS[@]:1}"
+      "${_AIRPORT_CMD}" "${_ARGUMENTS[@]:1}"
       ;;
     "help")
       _print_help
@@ -399,15 +399,15 @@ _airport() {
 ###############################################################################
 
 _main() {
-  if (("$_PRINT_HELP"))
+  if (("${_PRINT_HELP}"))
   then
     _print_help
-  elif (("$_PRINT_VERSION"))
+  elif (("${_PRINT_VERSION}"))
   then
     _print_version
   else
-    _airport "$@"
+    _airport "${@}"
   fi
 }
 
-_main "$@"
+_main "${@}"
