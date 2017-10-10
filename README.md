@@ -7,7 +7,7 @@
 
 # airport
 
-A command line interface for Airport wireless on OS X.
+A command line interface for Airport wireless on macOS / OS X.
 
 ## Usage
 
