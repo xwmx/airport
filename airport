@@ -6,7 +6,7 @@
 # \__,_/_/_/  / .___/\____/_/   \__/
 #            /_/
 #
-# A command line interface for Wi-Fi on OS X.
+# A command line interface for Wi-Fi on macOS / OS X.
 #
 # Based on Bash Boilerplate: https://github.com/alphabetum/bash-boilerplate
 #
@@ -115,7 +115,7 @@ _print_help() {
 \__,_/_/_/  / .___/\____/_/   \__/
            /_/
 
-A command line interface for Wi-Fi on OS X.
+A command line interface for Wi-Fi on macOS.
 
 Usage:
   ${_ME} (on | off | info | quality | scan [<query>] | join <SSID>)
