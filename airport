@@ -333,7 +333,7 @@ _airport() {
 
       # Request password without displaying it
       printf "Password for \"%s\": " "${_ssid}"
-      read -s _password
+      read -r -s _password
       printf "\\n" # print newline to stop `read`.
 
       _debug printf "airport() \${_wifi_interface}: %s\\n" "${_wifi_interface}"
