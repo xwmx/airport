@@ -52,7 +52,7 @@ _debug() {
     # Prefix debug message with "bug (U+1F41B)"
     printf "🐛  %s " "${__DEBUG_COUNTER}"
     "${@}"
-    printf "――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n"
+    printf "――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――\\n"
   fi
 }
 # debug()
@@ -110,9 +110,9 @@ _print_help() {
   cat <<HEREDOC
          _                       __
   ____ _(_)________  ____  _____/ /_
- / __ \`/ / ___/ __ \/ __ \/ ___/ __/
+ / __ \`/ / ___/ __ \\/ __ \\/ ___/ __/
 / /_/ / / /  / /_/ / /_/ / /  / /_
-\__,_/_/_/  / .___/\____/_/   \__/
+\\__,_/_/_/  / .___/\\____/_/   \\__/
            /_/
 
 A command line interface for Wi-Fi on macOS.
@@ -147,7 +147,7 @@ HEREDOC
 #
 # Print the value of $_VERSION.
 _print_version() {
-  printf "%s\n" "${_VERSION}"
+  printf "%s\\n" "${_VERSION}"
 }
 
 ###############################################################################
@@ -255,7 +255,7 @@ _require_argument() {
 
   if [[ -z "${value}" ]]
   then
-    _die printf "Option requires an argument: %s\n" "${option}"
+    _die printf "Option requires an argument: %s\\n" "${option}"
   fi
 }
 # getopts and getopts have inconsistent behavior, so using a simple home-brewed
@@ -293,8 +293,8 @@ do
   esac
 done
 
-_debug printf "\${_SUBCOMMAND}: %s\n" "${_SUBCOMMAND}"
-_debug printf "\${_ARGUMENTS[*]:-}: %s\n" "${_ARGUMENTS[*]:-}"
+_debug printf "\${_SUBCOMMAND}: %s\\n" "${_SUBCOMMAND}"
+_debug printf "\${_ARGUMENTS[*]:-}: %s\\n" "${_ARGUMENTS[*]:-}"
 
 ###############################################################################
 # Program Functions
@@ -303,7 +303,7 @@ _debug printf "\${_ARGUMENTS[*]:-}: %s\n" "${_ARGUMENTS[*]:-}"
 _AIRPORT_FRAMEWORK_PATH="/System/Library/PrivateFrameworks/Apple80211.framework"
 _AIRPORT_CMD="${_AIRPORT_FRAMEWORK_PATH}/Versions/A/Resources/airport"
 _airport() {
-  _debug printf "airport() >> start\n"
+  _debug printf "airport() >> start\\n"
 
   local _networksetup_cmd
   local _wifi_interface
@@ -321,11 +321,11 @@ _airport() {
   case "${_SUBCOMMAND}" in
     "on")
       "${_networksetup_cmd}" -setairportpower "${_wifi_interface}" on && \
-        printf "Airport on\n"
+        printf "Airport on\\n"
       ;;
     "off")
       "${_networksetup_cmd}" -setairportpower "${_wifi_interface}" off && \
-        printf "Airport off\n"
+        printf "Airport off\\n"
       ;;
     "join")
       local _ssid="${_ARGUMENTS[1]:-}"
@@ -334,10 +334,10 @@ _airport() {
       # Request password without displaying it
       printf "Password for \"%s\": " "${_ssid}"
       read -s _password
-      printf "\n" # print newline to stop `read`.
+      printf "\\n" # print newline to stop `read`.
 
-      _debug printf "airport() \${_wifi_interface}: %s\n" "${_wifi_interface}"
-      _debug printf "airport() \${_ssid}: %s\n" "${_ssid}"
+      _debug printf "airport() \${_wifi_interface}: %s\\n" "${_wifi_interface}"
+      _debug printf "airport() \${_ssid}: %s\\n" "${_ssid}"
 
       "${_networksetup_cmd}" \
         -setairportnetwork \
@@ -358,14 +358,14 @@ _airport() {
       # Reference: http://apple.stackexchange.com/a/110884
       _info="$(${_ME} airport info)"
       _signal="$(
-        printf "%s\n" "${_info}" | awk '/agrCtlRSSI/ {print $NF}'
+        printf "%s\\n" "${_info}" | awk '/agrCtlRSSI/ {print $NF}'
       )"
       _noise="$(
-        printf "%s\n" "${_info}" | awk '/agrCtlNoise/ {print $NF}'
+        printf "%s\\n" "${_info}" | awk '/agrCtlNoise/ {print $NF}'
       )"
-      _snr="$(printf "100*(%s -(%s))\n" "${_signal}" "${_noise}" | bc -l)"
-      _percent="$(printf "%s/50\n" "${_snr}" | bc -l)"
-      printf "%s%%\n" "${_percent%.*}"
+      _snr="$(printf "100*(%s -(%s))\\n" "${_signal}" "${_noise}" | bc -l)"
+      _percent="$(printf "%s/50\\n" "${_snr}" | bc -l)"
+      printf "%s%%\\n" "${_percent%.*}"
       ;;
     "scan")
       local _query="${_ARGUMENTS[1]:-}"
@@ -380,7 +380,7 @@ _airport() {
 
       if [[ -n "${_result}" ]]
       then
-        printf "%s\n" "${_result}"
+        printf "%s\\n" "${_result}"
       else
         return 1
       fi
