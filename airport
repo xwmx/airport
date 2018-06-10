@@ -173,12 +173,12 @@ _ARGUMENTS=("${0}")
 # Checks if an value has been set to the expected variable and, if not, prints
 # and error message and exits with status 1.
 _require_argument() {
-  local option="${1}"
-  local value="${2}"
+  local _option="${1}"
+  local _value="${2}"
 
-  if [[ -z "${value}" ]]
+  if [[ -z "${_value}" ]]
   then
-    _die printf "Option requires an argument: %s\\n" "${option}"
+    _die printf "Option requires an argument: %s\\n" "${_option}"
   fi
 }
 # getopts and getopts have inconsistent behavior, so using a simple home-brewed
