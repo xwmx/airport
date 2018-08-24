@@ -231,6 +231,10 @@ _airport() {
   local _networksetup_cmd
   local _wifi_interface
 
+  # shellcheck disable=SC2230
+  # https://github.com/koalaman/shellcheck/wiki/SC2230
+  # See: "SC2230 - command -v is not a direct replacement for which #1162"
+  #   https://github.com/koalaman/shellcheck/issues/1162
   _networksetup_cmd="$(which networksetup)"
 
   # Command references:
