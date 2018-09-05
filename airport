@@ -32,6 +32,16 @@ _VERSION="0.3.1"
 # Set to the program's basename.
 _ME=$(basename "${0}")
 
+# $_AIRPORT_FRAMEWORK_PATH
+#
+# The path to Apple's airport framework on the local system.
+_AIRPORT_FRAMEWORK_PATH="/System/Library/PrivateFrameworks/Apple80211.framework"
+
+# $_AIRPORT_CMD
+#
+# The path to the `airport` command line tool.
+_AIRPORT_CMD="${_AIRPORT_FRAMEWORK_PATH}/Versions/A/Resources/airport"
+
 ###############################################################################
 # Debug
 ###############################################################################
@@ -231,8 +241,6 @@ _debug printf "\${_ARGUMENTS[*]:-}: %s\\n" "${_ARGUMENTS[*]:-}"
 # Program Functions
 ###############################################################################
 
-_AIRPORT_FRAMEWORK_PATH="/System/Library/PrivateFrameworks/Apple80211.framework"
-_AIRPORT_CMD="${_AIRPORT_FRAMEWORK_PATH}/Versions/A/Resources/airport"
 _airport() {
   _debug printf "airport() >> start\\n"
 
