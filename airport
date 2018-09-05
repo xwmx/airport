@@ -204,22 +204,6 @@ _USE_DEBUG=0
 _SUBCOMMAND="info"
 _ARGUMENTS=("${0}")
 
-# _require_argument()
-#
-# Usage:
-#  _require_argument "$opt" "$_value_variable"
-#
-# Checks if an value has been set to the expected variable and, if not, prints
-# and error message and exits with status 1.
-_require_argument() {
-  local _option="${1}"
-  local _value="${2}"
-
-  if [[ -z "${_value}" ]]
-  then
-    _die printf "Option requires an argument: %s\\n" "${_option}"
-  fi
-}
 # getopts and getopts have inconsistent behavior, so using a simple home-brewed
 # while loop. This isn't perfectly compliant with POSIX, but it's close enough
 # and this appears to be a widely used approach.
