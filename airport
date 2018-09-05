@@ -50,6 +50,16 @@ _AIRPORT_CMD="${_AIRPORT_FRAMEWORK_PATH}/Versions/A/Resources/airport"
 #   https://github.com/koalaman/shellcheck/issues/1162
 _NETWORKSETUP_CMD="$(which networksetup)"
 
+# $_WIFI_INTERFACE
+#
+# Command references:
+# - http://apple.stackexchange.com/a/90516
+# - https://jamfnation.jamfsoftware.com/discussion.html?id=4849
+_WIFI_INTERFACE="$(
+  "${_NETWORKSETUP_CMD}" \
+    -listallhardwareports | awk '/Wi-Fi|AirPort/ {getline; print $NF}'
+)"
+
 ###############################################################################
 # Debug
 ###############################################################################
@@ -252,23 +262,13 @@ _debug printf "\${_ARGUMENTS[*]:-}: %s\\n" "${_ARGUMENTS[*]:-}"
 _airport() {
   _debug printf "airport() >> start\\n"
 
-  local _wifi_interface
-
-  # Command references:
-  # - http://apple.stackexchange.com/a/90516
-  # - https://jamfnation.jamfsoftware.com/discussion.html?id=4849
-  _wifi_interface="$(
-    "${_NETWORKSETUP_CMD}" \
-      -listallhardwareports | awk '/Wi-Fi|AirPort/ {getline; print $NF}'
-  )"
-
   case "${_SUBCOMMAND}" in
     "on")
-      "${_NETWORKSETUP_CMD}" -setairportpower "${_wifi_interface}" on && \
+      "${_NETWORKSETUP_CMD}" -setairportpower "${_WIFI_INTERFACE}" on && \
         printf "Airport on\\n"
       ;;
     "off")
-      "${_NETWORKSETUP_CMD}" -setairportpower "${_wifi_interface}" off && \
+      "${_NETWORKSETUP_CMD}" -setairportpower "${_WIFI_INTERFACE}" off && \
         printf "Airport off\\n"
       ;;
     "join")
@@ -280,12 +280,12 @@ _airport() {
       read -r -s _password
       printf "\\n" # print newline to stop `read`.
 
-      _debug printf "airport() \${_wifi_interface}: %s\\n" "${_wifi_interface}"
+      _debug printf "airport() \${_WIFI_INTERFACE}: %s\\n" "${_WIFI_INTERFACE}"
       _debug printf "airport() \${_ssid}: %s\\n" "${_ssid}"
 
       "${_NETWORKSETUP_CMD}" \
         -setairportnetwork \
-        "${_wifi_interface}" \
+        "${_WIFI_INTERFACE}" \
         "${_ssid}" \
         "${_password}"
       ;;
