@@ -118,7 +118,7 @@ _print_help() {
 A command line interface for Wi-Fi on macOS.
 
 Usage:
-  ${_ME} (on | off | info [-l|--long] | quality | scan [<query>] | join <SSID>)
+  ${_ME} (on | off | info [-l|--long] | quality | scan [<query>] | ssid | join <SSID>)
   ${_ME} -h | --help | help
   ${_ME} --version
 
