@@ -201,7 +201,7 @@ _PRINT_VERSION=0
 _USE_DEBUG=0
 
 # Initialize additional expected option variables.
-_SUBCOMMAND="help"
+_SUBCOMMAND="info"
 _ARGUMENTS=("${0}")
 
 # _require_argument()
