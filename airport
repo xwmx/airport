@@ -217,7 +217,7 @@ do
   opt="${1}"
   shift
   case "${opt}" in
-    -h|--help)
+    -h|--help|help)
       _PRINT_HELP=1
       ;;
     --debug)
