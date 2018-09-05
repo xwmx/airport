@@ -25,6 +25,9 @@ IFS=$'\n\t'
 # Environment
 ###############################################################################
 
+# $_VERSION
+#
+# The current program version.
 _VERSION="0.3.1"
 
 # $_ME
