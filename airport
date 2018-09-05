@@ -118,14 +118,15 @@ _print_help() {
 A command line interface for Wi-Fi on macOS.
 
 Usage:
-  ${_ME} (on | off | info | quality | scan [<query>] | join <SSID>)
+  ${_ME} (on | off | info [-l|--long] | quality | scan [<query>] | join <SSID>)
   ${_ME} -h | --help | help
   ${_ME} --version
 
 Subcommands:
   on       Turn wireless on.
   off      Turn wireless off.
-  info     Show the current airport status.
+  info     Print the current network SSID and quality. Use the the -l or --long
+           options to print detailed information.
   quality  Show the wireless quality as a percentage.
   scan     Perform a scan for wireless networks.
   ssid     Print the current network's SSID.
@@ -274,7 +275,25 @@ _airport() {
         "${_password}"
       ;;
     "info")
-      "${_AIRPORT_CMD}" --getinfo
+      local _ssid
+      _ssid="$("${_ME}" ssid)"
+
+      local _quality
+      if [[ -n "${_ssid}" ]]
+      then
+        _quality="$("${_ME}" quality)"
+      fi
+
+      if [[ "${_ARGUMENTS[1]:-}" =~ ^-l|--help$ ]]
+      then
+        "${_AIRPORT_CMD}" --getinfo &&
+          printf "        quality: %s\\n" "${_quality}"
+      else
+        if [[ -n "${_ssid}" ]]
+        then
+          printf "Connected: %s (%s)\\n" "${_ssid}" "${_quality}"
+        fi
+      fi
       ;;
     "quality")
       local _info

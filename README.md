@@ -13,14 +13,15 @@ A command line interface for Airport wireless on macOS / OS X.
 
 ```
 Usage:
-  airport (on | off | info | quality | scan [<query>] | ssid | join <SSID>)
+  airport on | off | info [-l|--long] | quality | scan [<query>] | ssid | join <SSID>)
   airport -h | --help | help
   airport --version
 
 Subcommands:
   on       Turn wireless on.
   off      Turn wireless off.
-  info     Show the current airport status.
+  info     Print the current network SSID and quality. Use the the -l or --long
+           options to print detailed information.
   quality  Show the wireless quality as a percentage.
   scan     Perform a scan for wireless networks.
   ssid     Print the current network's SSID.
