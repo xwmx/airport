@@ -56,8 +56,8 @@ _NETWORKSETUP_CMD="$(which networksetup)"
 # - http://apple.stackexchange.com/a/90516
 # - https://jamfnation.jamfsoftware.com/discussion.html?id=4849
 _WIFI_INTERFACE="$(
-  "${_NETWORKSETUP_CMD}" \
-    -listallhardwareports | awk '/Wi-Fi|AirPort/ {getline; print $NF}'
+  "${_NETWORKSETUP_CMD}" -listallhardwareports \
+    | awk '/Wi-Fi|AirPort/ {getline; print $NF}'
 )"
 
 ###############################################################################
