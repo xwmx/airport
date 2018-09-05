@@ -268,11 +268,11 @@ _airport() {
   case "${_SUBCOMMAND}" in
     "on")
       "${_NETWORKSETUP_CMD}" -setairportpower "${_WIFI_INTERFACE}" on && \
-        printf "Airport on\\n"
+        printf "Airport: On\\n"
       ;;
     "off")
       "${_NETWORKSETUP_CMD}" -setairportpower "${_WIFI_INTERFACE}" off && \
-        printf "Airport off\\n"
+        printf "Airport: Off\\n"
       ;;
     "join")
       local _ssid="${_ARGUMENTS[1]:-}"
@@ -297,19 +297,22 @@ _airport() {
       _ssid="$("${_ME}" ssid)"
 
       local _quality
-      if [[ -n "${_ssid}" ]]
+      if [[ -n "${_ssid:-}" ]]
       then
         _quality="$("${_ME}" quality)"
       fi
 
       if [[ "${_ARGUMENTS[1]:-}" =~ ^-l|--help$ ]]
       then
-        "${_AIRPORT_CMD}" --getinfo &&
-          printf "        quality: %s\\n" "${_quality}"
+        "${_AIRPORT_CMD}" --getinfo \
+          && [[ -n "${_quality:-}" ]] \
+          && printf "        quality: %s\\n" "${_quality}"
       else
         if [[ -n "${_ssid}" ]]
         then
-          printf "Connected: %s (%s)\\n" "${_ssid}" "${_quality}"
+          printf "Airport: On, Connected: %s (%s)\\n" "${_ssid}" "${_quality}"
+        else
+          printf "Airport: On, Disconnected\\n"
         fi
       fi
       ;;
