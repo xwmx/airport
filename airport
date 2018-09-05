@@ -128,6 +128,7 @@ Subcommands:
   info     Show the current airport status.
   quality  Show the wireless quality as a percentage.
   scan     Perform a scan for wireless networks.
+  ssid     Print the current network's SSID.
   join     Join the specified network.
   help     Display this help information.
 
@@ -203,7 +204,7 @@ do
     --version)
       _PRINT_VERSION=1
       ;;
-    on|off|info|quality|scan|join|tool)
+    on|off|info|quality|scan|ssid|join|tool)
       _SUBCOMMAND="${opt}"
       ;;
     --endopts)
@@ -311,6 +312,11 @@ _airport() {
       else
         return 1
       fi
+      ;;
+    "ssid")
+      "${_AIRPORT_CMD}" --getinfo \
+        | grep '[^B]SSID' \
+        | sed 's/.*SSID: //'
       ;;
     "tool")
       "${_AIRPORT_CMD}" "${_ARGUMENTS[@]:1}"

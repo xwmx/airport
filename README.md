@@ -13,7 +13,7 @@ A command line interface for Airport wireless on macOS / OS X.
 
 ```
 Usage:
-  airport (on | off | info | quality | scan [<query>] | join <SSID>)
+  airport (on | off | info | quality | scan [<query>] | ssid | join <SSID>)
   airport -h | --help | help
   airport --version
 
@@ -23,6 +23,7 @@ Subcommands:
   info     Show the current airport status.
   quality  Show the wireless quality as a percentage.
   scan     Perform a scan for wireless networks.
+  ssid     Print the current network's SSID.
   join     Join the specified network.
   help     Display this help information.
 
