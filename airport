@@ -42,6 +42,14 @@ _AIRPORT_FRAMEWORK_PATH="/System/Library/PrivateFrameworks/Apple80211.framework"
 # The path to the `airport` command line tool.
 _AIRPORT_CMD="${_AIRPORT_FRAMEWORK_PATH}/Versions/A/Resources/airport"
 
+# $_NETWORKSETUP_CMD
+#
+# shellcheck disable=SC2230
+# https://github.com/koalaman/shellcheck/wiki/SC2230
+# See: "SC2230 - command -v is not a direct replacement for which #1162"
+#   https://github.com/koalaman/shellcheck/issues/1162
+_NETWORKSETUP_CMD="$(which networksetup)"
+
 ###############################################################################
 # Debug
 ###############################################################################
@@ -244,30 +252,23 @@ _debug printf "\${_ARGUMENTS[*]:-}: %s\\n" "${_ARGUMENTS[*]:-}"
 _airport() {
   _debug printf "airport() >> start\\n"
 
-  local _networksetup_cmd
   local _wifi_interface
-
-  # shellcheck disable=SC2230
-  # https://github.com/koalaman/shellcheck/wiki/SC2230
-  # See: "SC2230 - command -v is not a direct replacement for which #1162"
-  #   https://github.com/koalaman/shellcheck/issues/1162
-  _networksetup_cmd="$(which networksetup)"
 
   # Command references:
   # - http://apple.stackexchange.com/a/90516
   # - https://jamfnation.jamfsoftware.com/discussion.html?id=4849
   _wifi_interface="$(
-    "${_networksetup_cmd}" \
+    "${_NETWORKSETUP_CMD}" \
       -listallhardwareports | awk '/Wi-Fi|AirPort/ {getline; print $NF}'
   )"
 
   case "${_SUBCOMMAND}" in
     "on")
-      "${_networksetup_cmd}" -setairportpower "${_wifi_interface}" on && \
+      "${_NETWORKSETUP_CMD}" -setairportpower "${_wifi_interface}" on && \
         printf "Airport on\\n"
       ;;
     "off")
-      "${_networksetup_cmd}" -setairportpower "${_wifi_interface}" off && \
+      "${_NETWORKSETUP_CMD}" -setairportpower "${_wifi_interface}" off && \
         printf "Airport off\\n"
       ;;
     "join")
@@ -282,7 +283,7 @@ _airport() {
       _debug printf "airport() \${_wifi_interface}: %s\\n" "${_wifi_interface}"
       _debug printf "airport() \${_ssid}: %s\\n" "${_ssid}"
 
-      "${_networksetup_cmd}" \
+      "${_NETWORKSETUP_CMD}" \
         -setairportnetwork \
         "${_wifi_interface}" \
         "${_ssid}" \
