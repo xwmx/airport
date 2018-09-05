@@ -284,7 +284,7 @@ _airport() {
       local _percent
 
       # Reference: http://apple.stackexchange.com/a/110884
-      _info="$(${_ME} airport info)"
+      _info="$(${_ME} info)"
       _signal="$(
         printf "%s\\n" "${_info}" | awk '/agrCtlRSSI/ {print $NF}'
       )"
