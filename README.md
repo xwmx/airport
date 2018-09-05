@@ -13,19 +13,25 @@ A command line interface for Airport wireless on macOS / OS X.
 
 ```
 Usage:
-  airport on | off | info [-l|--long] | quality | scan [<query>] | ssid | join <SSID>)
+  airport info [-l|--long]
+  airport join <SSID>
+  airport quality
+  airport off
+  airport on
+  airport scan [<query>]
+  airport ssid
   airport -h | --help | help
   airport --version
 
 Subcommands:
-  on       Turn wireless on.
-  off      Turn wireless off.
   info     Print the current network SSID and quality. Use the the -l or --long
            options to print detailed information.
+  join     Join the specified network.
   quality  Show the wireless quality as a percentage.
+  off      Turn wireless off.
+  on       Turn wireless on.
   scan     Perform a scan for wireless networks.
   ssid     Print the current network's SSID.
-  join     Join the specified network.
   help     Display this help information.
 
 Options:
