@@ -246,109 +246,120 @@ _debug printf "\${_ARGUMENTS[*]:-}: %s\\n" "${_ARGUMENTS[*]:-}"
 # Program Functions
 ###############################################################################
 
-_airport() {
-  _debug printf "airport() >> start\\n"
+# ------------------------------------------------------------------ _quality()
+_quality() {
+  local _info
+  local _signal
+  local _noise
+  local _snr
+  local _percent
 
-  case "${_SUBCOMMAND}" in
-    "on")
-      "${_NETWORKSETUP_CMD}" -setairportpower "${_WIFI_INTERFACE}" on && \
-        printf "AirPort: On\\n"
-      ;;
-    "off")
-      "${_NETWORKSETUP_CMD}" -setairportpower "${_WIFI_INTERFACE}" off && \
-        printf "AirPort: Off\\n"
-      ;;
-    "join")
-      local _ssid="${_ARGUMENTS[1]:-}"
-      local _password=
+  # Reference: http://apple.stackexchange.com/a/110884
+  _info="$("${_AIRPORT_CMD}" --getinfo)"
+  _signal="$(
+    printf "%s\\n" "${_info}" | awk '/agrCtlRSSI/ {print $NF}'
+  )"
+  _noise="$(
+    printf "%s\\n" "${_info}" | awk '/agrCtlNoise/ {print $NF}'
+  )"
+  _snr="$(printf "100*(%s -(%s))\\n" "${_signal}" "${_noise}" | bc -l)"
+  _percent="$(printf "%s/50\\n" "${_snr}" | bc -l)"
+  printf "%s%%\\n" "${_percent%.*}"
+}
 
-      # Request password without displaying it
-      printf "Password for \"%s\": " "${_ssid}"
-      read -r -s _password
-      printf "\\n" # print newline to stop `read`.
+# --------------------------------------------------------------------- _help()
+_help() {
+  _print_help
+}
 
-      _debug printf "airport() \${_WIFI_INTERFACE}: %s\\n" "${_WIFI_INTERFACE}"
-      _debug printf "airport() \${_ssid}: %s\\n" "${_ssid}"
+# --------------------------------------------------------------------- _info()
+_info() {
+  local _ssid
+  _ssid="$("${_ME}" ssid)"
 
-      "${_NETWORKSETUP_CMD}" \
-        -setairportnetwork \
-        "${_WIFI_INTERFACE}" \
-        "${_ssid}" \
-        "${_password}"
-      ;;
-    "info")
-      local _ssid
-      _ssid="$("${_ME}" ssid)"
+  local _quality
+  if [[ -n "${_ssid:-}" ]]
+  then
+    _quality="$("${_ME}" quality)"
+  fi
 
-      local _quality
-      if [[ -n "${_ssid:-}" ]]
-      then
-        _quality="$("${_ME}" quality)"
-      fi
+  if [[ "${_ARGUMENTS[1]:-}" =~ ^-l|--help$ ]]
+  then
+    "${_AIRPORT_CMD}" --getinfo \
+      && [[ -n "${_quality:-}" ]] \
+      && printf "        quality: %s\\n" "${_quality}"
+  else
+    if [[ -n "${_ssid}" ]]
+    then
+      printf "AirPort: On, Connected: %s (%s)\\n" "${_ssid}" "${_quality}"
+    else
+      printf "AirPort: On, Disconnected\\n"
+    fi
+  fi
+}
 
-      if [[ "${_ARGUMENTS[1]:-}" =~ ^-l|--help$ ]]
-      then
-        "${_AIRPORT_CMD}" --getinfo \
-          && [[ -n "${_quality:-}" ]] \
-          && printf "        quality: %s\\n" "${_quality}"
-      else
-        if [[ -n "${_ssid}" ]]
-        then
-          printf "AirPort: On, Connected: %s (%s)\\n" "${_ssid}" "${_quality}"
-        else
-          printf "AirPort: On, Disconnected\\n"
-        fi
-      fi
-      ;;
-    "quality")
-      local _info
-      local _signal
-      local _noise
-      local _snr
-      local _percent
+# --------------------------------------------------------------------- _join()
+_join() {
+  local _ssid="${_ARGUMENTS[1]:-}"
+  local _password=
 
-      # Reference: http://apple.stackexchange.com/a/110884
-      _info="$("${_AIRPORT_CMD}" --getinfo)"
-      _signal="$(
-        printf "%s\\n" "${_info}" | awk '/agrCtlRSSI/ {print $NF}'
-      )"
-      _noise="$(
-        printf "%s\\n" "${_info}" | awk '/agrCtlNoise/ {print $NF}'
-      )"
-      _snr="$(printf "100*(%s -(%s))\\n" "${_signal}" "${_noise}" | bc -l)"
-      _percent="$(printf "%s/50\\n" "${_snr}" | bc -l)"
-      printf "%s%%\\n" "${_percent%.*}"
-      ;;
-    "scan")
-      local _query="${_ARGUMENTS[1]:-}"
-      local _result=
+  # Request password without displaying it
+  printf "Password for \"%s\": " "${_ssid}"
+  read -r -s _password
+  printf "\\n" # print newline to stop `read`.
 
-      if [[ -n "${_query}" ]]
-      then
-        _result="$("${_AIRPORT_CMD}" --scan | grep "${_query}")"
-      else
-        _result="$("${_AIRPORT_CMD}" --scan)"
-      fi
+  _debug printf "airport() \${_WIFI_INTERFACE}: %s\\n" "${_WIFI_INTERFACE}"
+  _debug printf "airport() \${_ssid}: %s\\n" "${_ssid}"
 
-      if [[ -n "${_result}" ]]
-      then
-        printf "%s\\n" "${_result}"
-      else
-        return 1
-      fi
-      ;;
-    "ssid")
-      "${_AIRPORT_CMD}" --getinfo \
-        | grep '[^B]SSID' \
-        | sed 's/.*SSID: //'
-      ;;
-    "tool")
-      "${_AIRPORT_CMD}" "${_ARGUMENTS[@]:1}"
-      ;;
-    "help")
-      _print_help
-      ;;
-  esac
+  "${_NETWORKSETUP_CMD}" \
+    -setairportnetwork \
+    "${_WIFI_INTERFACE}" \
+    "${_ssid}" \
+    "${_password}"
+}
+
+# ----------------------------------------------------------------------- _on()
+_on() {
+  "${_NETWORKSETUP_CMD}" -setairportpower "${_WIFI_INTERFACE}" on && \
+    printf "AirPort: On\\n"
+}
+
+# ---------------------------------------------------------------------- _off()
+_off() {
+  "${_NETWORKSETUP_CMD}" -setairportpower "${_WIFI_INTERFACE}" off && \
+    printf "AirPort: Off\\n"
+}
+
+# --------------------------------------------------------------------- _scan()
+_scan() {
+  local _query="${_ARGUMENTS[1]:-}"
+  local _result=
+
+  if [[ -n "${_query}" ]]
+  then
+    _result="$("${_AIRPORT_CMD}" --scan | grep "${_query}")"
+  else
+    _result="$("${_AIRPORT_CMD}" --scan)"
+  fi
+
+  if [[ -n "${_result}" ]]
+  then
+    printf "%s\\n" "${_result}"
+  else
+    return 1
+  fi
+}
+
+# --------------------------------------------------------------------- _ssid()
+_ssid() {
+  "${_AIRPORT_CMD}" --getinfo \
+    | grep '[^B]SSID' \
+    | sed 's/.*SSID: //'
+}
+
+# --------------------------------------------------------------------- _tool()
+_tool() {
+  "${_AIRPORT_CMD}" "${_ARGUMENTS[@]:1}"
 }
 
 ###############################################################################
@@ -363,7 +374,7 @@ _main() {
   then
     _print_version
   else
-    _airport "${@}"
+    "_${_SUBCOMMAND}" "${@}"
   fi
 }
 
