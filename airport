@@ -185,34 +185,6 @@ _debug printf "\${_ARGUMENTS[*]:-}: %s\\n" "${_ARGUMENTS[*]:-}"
 # Program Functions
 ###############################################################################
 
-# ------------------------------------------------------------------ _quality()
-# _quality()
-#
-# Usage:
-#   _quality
-#
-# Description:
-#   Print the wi-fi quality as a percent.
-_quality() {
-  local _info
-  local _signal
-  local _noise
-  local _snr
-  local _percent
-
-  # Reference: http://apple.stackexchange.com/a/110884
-  _info="$("${_AIRPORT_CMD}" --getinfo)"
-  _signal="$(
-    printf "%s\\n" "${_info}" | awk '/agrCtlRSSI/ {print $NF}'
-  )"
-  _noise="$(
-    printf "%s\\n" "${_info}" | awk '/agrCtlNoise/ {print $NF}'
-  )"
-  _snr="$(printf "100*(%s -(%s))\\n" "${_signal}" "${_noise}" | bc -l)"
-  _percent="$(printf "%s/50\\n" "${_snr}" | bc -l)"
-  printf "%s%%\\n" "${_percent%.*}"
-}
-
 # --------------------------------------------------------------------- _help()
 # _help()
 #
@@ -344,6 +316,34 @@ _on() {
 _off() {
   "${_NETWORKSETUP_CMD}" -setairportpower "${_WIFI_INTERFACE}" off && \
     printf "AirPort: Off\\n"
+}
+
+# ------------------------------------------------------------------ _quality()
+# _quality()
+#
+# Usage:
+#   _quality
+#
+# Description:
+#   Print the wi-fi quality as a percent.
+_quality() {
+  local _info
+  local _signal
+  local _noise
+  local _snr
+  local _percent
+
+  # Reference: http://apple.stackexchange.com/a/110884
+  _info="$("${_AIRPORT_CMD}" --getinfo)"
+  _signal="$(
+    printf "%s\\n" "${_info}" | awk '/agrCtlRSSI/ {print $NF}'
+  )"
+  _noise="$(
+    printf "%s\\n" "${_info}" | awk '/agrCtlNoise/ {print $NF}'
+  )"
+  _snr="$(printf "100*(%s -(%s))\\n" "${_signal}" "${_noise}" | bc -l)"
+  _percent="$(printf "%s/50\\n" "${_snr}" | bc -l)"
+  printf "%s%%\\n" "${_percent%.*}"
 }
 
 # --------------------------------------------------------------------- _scan()
