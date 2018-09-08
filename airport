@@ -247,6 +247,13 @@ _debug printf "\${_ARGUMENTS[*]:-}: %s\\n" "${_ARGUMENTS[*]:-}"
 ###############################################################################
 
 # ------------------------------------------------------------------ _quality()
+# _quality()
+#
+# Usage:
+#   _quality
+#
+# Description:
+#   Print the wi-fi quality as a percent.
 _quality() {
   local _info
   local _signal
@@ -268,11 +275,25 @@ _quality() {
 }
 
 # --------------------------------------------------------------------- _help()
+# _help()
+#
+# Usage:
+#   _help
+#
+# Description:
+#   Print help information.
 _help() {
   _print_help
 }
 
 # --------------------------------------------------------------------- _info()
+# _info()
+#
+# Usage:
+#   _info
+#
+# Description:
+#   Print the current network SSID and quality.
 _info() {
   local _ssid
   _ssid="$("${_ME}" ssid)"
@@ -299,6 +320,13 @@ _info() {
 }
 
 # --------------------------------------------------------------------- _join()
+# _join()
+#
+# Usage:
+#   _join
+#
+# Description:
+#   Join the specified network.
 _join() {
   local _ssid="${_ARGUMENTS[1]:-}"
   local _password=
@@ -319,18 +347,39 @@ _join() {
 }
 
 # ----------------------------------------------------------------------- _on()
+# _on()
+#
+# Usage:
+#   _on
+#
+# Description:
+#   Turn wireless on.
 _on() {
   "${_NETWORKSETUP_CMD}" -setairportpower "${_WIFI_INTERFACE}" on && \
     printf "AirPort: On\\n"
 }
 
 # ---------------------------------------------------------------------- _off()
+# _off()
+#
+# Usage:
+#   _off
+#
+# Description:
+#   Turn wireless off.
 _off() {
   "${_NETWORKSETUP_CMD}" -setairportpower "${_WIFI_INTERFACE}" off && \
     printf "AirPort: Off\\n"
 }
 
 # --------------------------------------------------------------------- _scan()
+# _scan()
+#
+# Usage:
+#   _scan
+#
+# Description:
+#   Perform a scan for wireless networks.
 _scan() {
   local _query="${_ARGUMENTS[1]:-}"
   local _result=
@@ -351,6 +400,13 @@ _scan() {
 }
 
 # --------------------------------------------------------------------- _ssid()
+# _ssid()
+#
+# Usage:
+#   _ssid
+#
+# Description:
+#   Print the current network's SSID.
 _ssid() {
   "${_AIRPORT_CMD}" --getinfo \
     | grep '[^B]SSID' \
@@ -358,6 +414,13 @@ _ssid() {
 }
 
 # --------------------------------------------------------------------- _tool()
+# _tool()
+#
+# Usage:
+#   _tool
+#
+# Description:
+#   Run a command using the `airport` framework command line tool directly.
 _tool() {
   "${_AIRPORT_CMD}" "${_ARGUMENTS[@]:1}"
 }
