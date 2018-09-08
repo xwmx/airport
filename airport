@@ -129,67 +129,6 @@ die() {
 }
 
 ###############################################################################
-# Help
-###############################################################################
-
-# _print_help()
-#
-# Usage: _print_help
-#
-# Print the program help information.
-_print_help() {
-  cat <<HEREDOC
-         _                       __
-  ____ _(_)________  ____  _____/ /_
- / __ \`/ / ___/ __ \\/ __ \\/ ___/ __/
-/ /_/ / / /  / /_/ / /_/ / /  / /_
-\\__,_/_/_/  / .___/\\____/_/   \\__/
-           /_/
-
-A command line interface for Wi-Fi on macOS.
-
-Usage:
-  ${_ME} info [-l|--long]
-  ${_ME} join <SSID>
-  ${_ME} off
-  ${_ME} on
-  ${_ME} quality
-  ${_ME} scan [<query>]
-  ${_ME} ssid
-  ${_ME} -h | --help | help
-  ${_ME} --version
-
-Subcommands:
-  info     Print the current network SSID and quality. Use the the -l or --long
-           options to print detailed information.
-  join     Join the specified network.
-  quality  Show the wireless quality as a percentage.
-  off      Turn wireless off.
-  on       Turn wireless on.
-  scan     Perform a scan for wireless networks.
-  ssid     Print the current network's SSID.
-  help     Display this help information.
-
-Options:
-  -h --help  Display this help information.
-  --version  Display version information.
-HEREDOC
-}
-
-###############################################################################
-# Version
-###############################################################################
-
-# _print_version()
-#
-# Usage: _print_version
-#
-# Print the value of $_VERSION.
-_print_version() {
-  printf "%s\\n" "${_VERSION}"
-}
-
-###############################################################################
 # Options
 ###############################################################################
 
@@ -281,9 +220,44 @@ _quality() {
 #   _help
 #
 # Description:
-#   Print help information.
+#   Print the program help information.
 _help() {
-  _print_help
+  cat <<HEREDOC
+         _                       __
+  ____ _(_)________  ____  _____/ /_
+ / __ \`/ / ___/ __ \\/ __ \\/ ___/ __/
+/ /_/ / / /  / /_/ / /_/ / /  / /_
+\\__,_/_/_/  / .___/\\____/_/   \\__/
+           /_/
+
+A command line interface for Wi-Fi on macOS.
+
+Usage:
+  ${_ME} info [-l|--long]
+  ${_ME} join <SSID>
+  ${_ME} off
+  ${_ME} on
+  ${_ME} quality
+  ${_ME} scan [<query>]
+  ${_ME} ssid
+  ${_ME} -h | --help | help
+  ${_ME} --version
+
+Subcommands:
+  info     Print the current network SSID and quality. Use the the -l or --long
+           options to print detailed information.
+  join     Join the specified network.
+  quality  Show the wireless quality as a percentage.
+  off      Turn wireless off.
+  on       Turn wireless on.
+  scan     Perform a scan for wireless networks.
+  ssid     Print the current network's SSID.
+  help     Display this help information.
+
+Options:
+  -h --help  Display this help information.
+  --version  Display version information.
+HEREDOC
 }
 
 # --------------------------------------------------------------------- _info()
@@ -425,6 +399,18 @@ _tool() {
   "${_AIRPORT_CMD}" "${_ARGUMENTS[@]:1}"
 }
 
+# ------------------------------------------------------------------ _version()
+# _version()
+#
+# Usage:
+#   _version
+#
+# Description:
+#   Print the value of $_VERSION.
+_version() {
+  printf "%s\\n" "${_VERSION}"
+}
+
 ###############################################################################
 # Main
 ###############################################################################
@@ -432,10 +418,10 @@ _tool() {
 _main() {
   if (("${_PRINT_HELP}"))
   then
-    _print_help
+    _help
   elif (("${_PRINT_VERSION}"))
   then
-    _print_version
+    _version
   else
     "_${_SUBCOMMAND}" "${@}"
   fi
