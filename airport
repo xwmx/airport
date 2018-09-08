@@ -416,10 +416,10 @@ _version() {
 ###############################################################################
 
 _main() {
-  if (("${_PRINT_HELP}"))
+  if ((_PRINT_HELP))
   then
     _help
-  elif (("${_PRINT_VERSION}"))
+  elif ((_PRINT_VERSION))
   then
     _version
   else
