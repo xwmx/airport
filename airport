@@ -216,7 +216,7 @@ Usage:
   ${_ME} --version
 
 Subcommands:
-  info     Print the current network SSID and quality. Use the the -l or --long
+  info     Print the current network SSID and quality. Use the -l or --long
            options to print detailed information.
   join     Join the specified network.
   quality  Show the wireless quality as a percentage.
