@@ -1,6 +1,6 @@
 {
   "name": "airport",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "A command line interface for AirPort wireless on OS X.",
   "global": true,
   "install": "make install"
