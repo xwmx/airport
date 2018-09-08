@@ -269,12 +269,12 @@ _info() {
 # _join()
 #
 # Usage:
-#   _join
+#   _join <ssid>
 #
 # Description:
 #   Join the specified network.
 _join() {
-  local _ssid="${_ARGUMENTS[1]:-}"
+  local _ssid="${1:-}"
   local _password=
 
   # Request password without displaying it
@@ -350,12 +350,12 @@ _quality() {
 # _scan()
 #
 # Usage:
-#   _scan
+#   _scan [<query>]
 #
 # Description:
-#   Perform a scan for wireless networks.
+#   Perform a scan for wireless networks, optionally filtering by <query>.
 _scan() {
-  local _query="${_ARGUMENTS[1]:-}"
+  local _query="${1:-}"
   local _result=
 
   if [[ -n "${_query}" ]]
@@ -396,7 +396,7 @@ _ssid() {
 # Description:
 #   Run a command using the `airport` framework command line tool directly.
 _tool() {
-  "${_AIRPORT_CMD}" "${_ARGUMENTS[@]:1}"
+  "${_AIRPORT_CMD}" "$@"
 }
 
 # ------------------------------------------------------------------ _version()
@@ -423,7 +423,7 @@ _main() {
   then
     _version
   else
-    "_${_SUBCOMMAND}" "${@}"
+    "_${_SUBCOMMAND}" "${_ARGUMENTS[@]:1}"
   fi
 }
 
