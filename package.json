@@ -1,7 +1,7 @@
 {
   "name": "airport.sh",
   "version": "0.5.1",
-  "description": "A command line interface for AirPort wireless on OS X.",
+  "description": "A command line interface for AirPort wireless on macOS.",
   "global": true,
   "install": "make install",
   "main": "index.js",
