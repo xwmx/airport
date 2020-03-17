@@ -4,6 +4,9 @@
   "description": "A command line interface for AirPort wireless on macOS.",
   "global": true,
   "install": "make install",
+  "bin": {
+    "airport": "./airport"
+  },
   "directories": {
     "test": "test"
   },
