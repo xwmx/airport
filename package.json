@@ -1,7 +1,32 @@
 {
-  "name": "airport",
+  "name": "airport.sh",
   "version": "0.5.1",
   "description": "A command line interface for AirPort wireless on OS X.",
   "global": true,
-  "install": "make install"
+  "install": "make install",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "bats test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alphabetum/airport.git"
+  },
+  "keywords": [
+    "macos",
+    "airport",
+    "wifi",
+    "wireless",
+    "osx",
+    "apple"
+  ],
+  "author": "William Melody",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alphabetum/airport/issues"
+  },
+  "homepage": "https://github.com/alphabetum/airport#readme"
 }
