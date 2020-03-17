@@ -4,7 +4,6 @@
   "description": "A command line interface for AirPort wireless on macOS.",
   "global": true,
   "install": "make install",
-  "main": "index.js",
   "directories": {
     "test": "test"
   },
