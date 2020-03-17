@@ -49,6 +49,14 @@ To install with [Homebrew](http://brew.sh/):
 brew tap alphabetum/taps && brew install alphabetum/taps/airport
 ```
 
+### npm
+
+To install with [npm](https://www.npmjs.com/package/airport.sh):
+
+```bash
+npm install --global airport.sh
+```
+
 ### bpkg
 
 To install with [bpkg](http://www.bpkg.io/):
