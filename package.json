@@ -30,5 +30,6 @@
   "bugs": {
     "url": "https://github.com/alphabetum/airport/issues"
   },
-  "homepage": "https://github.com/alphabetum/airport#readme"
+  "homepage": "https://github.com/alphabetum/airport#readme",
+  "dependencies": {}
 }
