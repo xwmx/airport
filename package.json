@@ -23,7 +23,12 @@
     "wifi",
     "wireless",
     "osx",
-    "apple"
+    "apple",
+    "cli",
+    "terminal",
+    "command-line",
+    "prompt",
+    "shell"
   ],
   "author": "William Melody",
   "license": "MIT",
