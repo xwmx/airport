@@ -46,7 +46,7 @@ Options:
 To install with [Homebrew](http://brew.sh/):
 
 ```bash
-brew tap alphabetum/taps && brew install alphabetum/taps/airport
+brew tap xwmx/taps && brew install xwmx/taps/airport
 ```
 
 ### npm
@@ -62,7 +62,7 @@ npm install --global airport.sh
 To install with [bpkg](http://www.bpkg.io/):
 
 ```bash
-bpkg install alphabetum/airport
+bpkg install xwmx/airport
 ```
 
 ### Manual
@@ -71,6 +71,6 @@ To install manually, simply add the `airport` script to your `$PATH`. If
 you already have a `~/bin` directory, you can use the following command:
 
 ```bash
-curl -L https://raw.github.com/alphabetum/airport/master/airport \
+curl -L https://raw.github.com/xwmx/airport/master/airport \
   -o ~/bin/airport && chmod +x ~/bin/airport
 ```
