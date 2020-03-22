@@ -51,10 +51,10 @@ brew install xwmx/taps/airport
 
 ### npm
 
-To install with [npm](https://www.npmjs.com/package/airport.sh):
+To install with [npm](https://www.npmjs.com/package/airport-cli):
 
 ```bash
-npm install --global airport.sh
+npm install --global airport-cli
 ```
 
 ### bpkg

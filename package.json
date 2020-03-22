@@ -1,5 +1,5 @@
 {
-  "name": "airport.sh",
+  "name": "airport-cli",
   "version": "0.6.1",
   "description": "A command line interface for AirPort wireless on macOS.",
   "global": true,
