@@ -5,7 +5,7 @@
     \__,_/_/_/  / .___/\____/_/   \__/
                /_/
 
-# airport
+# airport cli
 
 A command line interface for AirPort wireless on macOS / OS X.
 
