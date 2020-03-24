@@ -231,6 +231,9 @@ Subcommands:
 Options:
   -h --help  Display this help information.
   --version  Display version information.
+
+Home:
+  https://github.com/xwmx/airport
 HEREDOC
 }
 
