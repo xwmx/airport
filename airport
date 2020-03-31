@@ -247,12 +247,12 @@ HEREDOC
 #   Print the current network SSID and quality.
 _info() {
   local _ssid
-  _ssid="$("${_ME}" ssid)"
+  _ssid="$(_ssid)"
 
   local _quality
   if [[ -n "${_ssid:-}" ]]
   then
-    _quality="$("${_ME}" quality)"
+    _quality="$(_quality)"
   fi
 
   if [[ "${_ARGUMENTS[1]:-}" =~ ^-l|--help$ ]]
