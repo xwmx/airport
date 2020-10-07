@@ -46,7 +46,8 @@ Options:
 To install with [Homebrew](http://brew.sh/):
 
 ```bash
-brew install xwmx/taps/airport
+brew tap xwmx/taps
+brew install airport
 ```
 
 ### npm
