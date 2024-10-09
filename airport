@@ -101,35 +101,41 @@ debug() {
 }
 
 ###############################################################################
-# Die
+# Warn
 ###############################################################################
 
-# _die()
+# _warn()
 #
 # Usage:
-#   _die printf "Error message. Variable: %s\n" "$0"
+#   _warn <command>
 #
-# A simple function for exiting with an error after executing the specified
-# command. The command is expected to print a message and should typically
-# be either `echo`, `printf`, or `cat`.
-_die() {
-  # Prefix die message with "cross mark (U+274C)", often displayed as a red x.
-  printf "❌  "
-  "${@}" 1>&2
-  exit 1
-}
-# die()
-#
-# Usage:
-#   die "Error message. Variable: $0"
-#
-# Exit with an error and print the specified message.
-#
-# This is a shortcut for the _die() function that simply echos the message.
-die() {
-  _die echo "${@}"
+# Description:
+#   Print the specified command with output redirected to standard error.
+#   The command is expected to print a message and should typically be either
+#   `echo`, `printf`, or `cat`.
+_warn() {
+  {
+    printf "%s " "$(tput setaf 1)!$(tput sgr0)"
+
+    "${@}"
+  } 1>&2
 }
 
+###############################################################################
+# Version Check
+###############################################################################
+
+_MACOS_VERSION=("$(sw_vers -productVersion | awk -F. '{print $1 $2}')")
+
+if [[ "${_MACOS_VERSION[0]}" -ge "14" ]] &&
+   [[ "${_MACOS_VERSION[0]}" -ge "4"  ]]
+then
+  _warn printf \
+    "Airport command line access is no longer available as of macOS Sonoma 14.4.\\n\\n"
+  "${_AIRPORT_CMD}"
+
+  exit 1
+fi
 ###############################################################################
 # Options
 ###############################################################################

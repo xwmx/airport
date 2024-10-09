@@ -7,7 +7,11 @@
 
 # airport cli
 
-A command line interface for AirPort wireless on macOS / OS X.
+A command line interface for AirPort wireless on macOS / OS X up to
+macOS Sonoma 14.4.
+
+**NOTE: Airport command line access is no longer available as of
+macOS Sonoma 14.4.**
 
 ## Usage
 
